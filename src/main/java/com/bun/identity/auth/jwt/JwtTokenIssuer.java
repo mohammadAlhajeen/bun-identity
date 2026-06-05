@@ -4,7 +4,7 @@ import java.time.Instant;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -41,7 +41,7 @@ public class JwtTokenIssuer {
         var now = Instant.now();
         var expiration = now.plusSeconds(expirationMinutes * 60L);
 
-        JwsHeader header = JwsHeader.with(MacAlgorithm.HS512).type("JWT").build();
+        JwsHeader header = JwsHeader.with(SignatureAlgorithm.RS256).type("JWT").build();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer(issuer)
                 .issuedAt(now)

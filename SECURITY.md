@@ -55,7 +55,8 @@ Add these based on your product's risk profile.
 
 Before production:
 
-- Replace the development `JWT_SECRET`.
+- Replace the development JWT RSA key pair.
+- Keep JWT private-key files outside the repository.
 - Use HTTPS.
 - Use strong database credentials.
 - Store secrets outside the repository.

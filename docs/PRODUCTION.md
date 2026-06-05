@@ -4,7 +4,8 @@ This checklist covers the main items to review before deploying a project based 
 
 ## Secrets
 
-- Replace the development `JWT_SECRET`.
+- Replace the development JWT RSA key pair.
+- Mount JWT RSA key files from your secret manager and set `JWT_RSA_PRIVATE_KEY_PATH` and `JWT_RSA_PUBLIC_KEY_PATH`.
 - Use a strong database password.
 - Store secrets in your deployment secret manager.
 - Keep `.env` out of git.

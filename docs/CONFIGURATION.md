@@ -30,33 +30,42 @@ Copy-Item example.env .env
 | `SPRING_FLYWAY_ENABLED` | `true` | Enables Flyway migrations |
 | `SPRING_FLYWAY_LOCATIONS` | `classpath:db/migration/postgresql` | Flyway migration location |
 | `SPRING_FLYWAY_BASELINE_ON_MIGRATE` | `false` | Flyway baseline behavior |
-| `JWT_SECRET` | development-only sample | Base64 encoded HS512 secret |
+| `JWT_RSA_PRIVATE_KEY_PATH` | `file:./keys/jwt-private.pem` | PKCS#8 PEM RSA private-key file used to sign JWTs |
+| `JWT_RSA_PUBLIC_KEY_PATH` | `file:./keys/jwt-public.pem` | X.509 PEM RSA public-key file used to verify JWTs |
 | `JWT_EXPIRATION_MINUTES` | `60` | Access-token TTL |
 | `JWT_ISSUER` | `identity-starter` | JWT issuer claim |
 
-## JWT Secret
+## JWT RSA Key Files
 
-The default secret is for local development only.
+The app reads RSA keys from PEM files. Generate local development keys before running the app:
 
-Generate a new HS512 secret with PowerShell:
+Windows PowerShell:
 
 ```powershell
-$bytes = New-Object byte[] 64
-[Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
-[Convert]::ToBase64String($bytes)
+.\scripts\generate-jwt-rsa-keys.ps1
 ```
 
-Generate a new HS512 secret with OpenSSL:
+Linux/macOS:
 
 ```bash
-openssl rand -base64 64
+bash scripts/generate-jwt-rsa-keys.sh
 ```
 
-Set it as:
+Both scripts write:
+
+```text
+keys/jwt-private.pem
+keys/jwt-public.pem
+```
+
+The default `.env` points to those files:
 
 ```properties
-JWT_SECRET=<base64-secret>
+JWT_RSA_PRIVATE_KEY_PATH=file:./keys/jwt-private.pem
+JWT_RSA_PUBLIC_KEY_PATH=file:./keys/jwt-public.pem
 ```
+
+The `keys/` directory is ignored by git. For production, generate keys outside the repository or mount them from your secret manager, then set these properties to those mounted file locations.
 
 ## Database
 

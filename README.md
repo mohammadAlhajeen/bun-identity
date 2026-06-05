@@ -42,6 +42,7 @@ Linux/macOS:
 
 ```bash
 cp example.env .env
+bash scripts/generate-jwt-rsa-keys.sh
 docker compose up -d
 ./mvnw spring-boot:run
 ```
@@ -50,6 +51,7 @@ Windows PowerShell:
 
 ```powershell
 Copy-Item example.env .env
+.\scripts\generate-jwt-rsa-keys.ps1
 docker compose up -d
 .\mvnw.cmd spring-boot:run
 ```
@@ -170,7 +172,7 @@ The test profile uses H2 in PostgreSQL compatibility mode and Flyway migrations 
 
 Before production:
 
-- Replace the development `JWT_SECRET`.
+- Replace the development JWT RSA key pair.
 - Use a strong database password.
 - Keep `.env` out of git.
 - Run behind HTTPS.

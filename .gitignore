@@ -8,6 +8,7 @@ target/
 .env.*
 !.env.example
 !example.env
+keys/
 
 ### Runtime logs and crash dumps ###
 *.log

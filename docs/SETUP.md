@@ -20,7 +20,7 @@ cd identity
 
 If you already have the project locally, run the commands from the repository root.
 
-## 2. Create Local Environment File
+## 2. Create Local Environment And JWT Keys
 
 Linux/macOS:
 
@@ -40,7 +40,23 @@ The application imports `.env` automatically through:
 spring.config.import=optional:file:.env[.properties]
 ```
 
-The sample values are safe for local development only. Replace secrets before any shared or public deployment.
+Generate the local JWT RSA key files referenced by `example.env`:
+
+Linux/macOS:
+
+```bash
+bash scripts/generate-jwt-rsa-keys.sh
+```
+
+Windows PowerShell:
+
+```powershell
+.\scripts\generate-jwt-rsa-keys.ps1
+```
+
+The scripts write `keys/jwt-private.pem` and `keys/jwt-public.pem`. The `keys/` directory is ignored by git.
+
+The sample values are safe for local development only. Replace secrets and keys before any shared or public deployment.
 
 ## 3. Start PostgreSQL
 
@@ -218,26 +234,25 @@ docker compose ps
 
 Check that `.env` matches `docker-compose.yml`.
 
-### JWT Secret Error
+### JWT RSA Key Error
 
-Use a Base64 encoded HS512 secret. For production, generate a new value:
+Generate the local JWT key files:
 
 ```bash
-openssl rand -base64 64
+bash scripts/generate-jwt-rsa-keys.sh
 ```
 
 PowerShell:
 
 ```powershell
-$bytes = New-Object byte[] 64
-[Security.Cryptography.RandomNumberGenerator]::Fill($bytes)
-[Convert]::ToBase64String($bytes)
+.\scripts\generate-jwt-rsa-keys.ps1
 ```
 
-Set it in `.env`:
+Then confirm `.env` points to the generated files:
 
 ```properties
-JWT_SECRET=<base64-secret>
+JWT_RSA_PRIVATE_KEY_PATH=file:./keys/jwt-private.pem
+JWT_RSA_PUBLIC_KEY_PATH=file:./keys/jwt-public.pem
 ```
 
 ## Before Production
